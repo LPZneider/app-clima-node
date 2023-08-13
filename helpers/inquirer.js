@@ -66,12 +66,12 @@ const readInput = async (message) => {
   return desc;
 };
 
-const listTasksDelete = async (tasks = []) => {
-  const choices = tasks.map((task, i) => {
+const listplaces = async (sites = []) => {
+  const choices = sites.map((site, i) => {
     const idx = `${i + 1}`.green;
     return {
-      value: task.id,
-      name: `${idx} ${task.desc}`,
+      value: site.id,
+      name: `${idx} ${site.name}`,
     };
   });
   choices.unshift({
@@ -82,7 +82,7 @@ const listTasksDelete = async (tasks = []) => {
     {
       type: "list",
       name: "id",
-      message: "¿Que desea eliminar?",
+      message: "seleccione un lugar",
       choices,
     },
   ];
@@ -132,7 +132,7 @@ module.exports = {
   inquirerMenu,
   pausa,
   readInput,
-  listTasksDelete,
+  listplaces,
   comfirm,
   listTasksCheck,
 };
