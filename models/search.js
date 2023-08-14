@@ -23,6 +23,16 @@ function Searchs() {
   this.history = ["bogota", "quetame", "madrid"];
 }
 
+Searchs.prototype.paramsOpenWeather = function (lat, lon) {
+  return {
+    lat,
+    lon,
+    appid: process.env.OPENWEATHER,
+    units: "metric",
+    lang: "es",
+  };
+};
+
 Searchs.prototype.city = async function (site = "") {
   try {
     const intance = axios.create({
@@ -49,4 +59,23 @@ Searchs.prototype.city = async function (site = "") {
   console.log(resp.data);
 };
 
+Searchs.prototype.localWeather = async function (lat, lon) {
+  try {
+    const intance = axios.create({
+      baseURL: `https://api.openweathermap.org/data/2.5/weather`,
+      params: this.paramsOpenWeather(lat, lon),
+    });
+
+    const resp = await intance.get();
+
+    return {
+      desc: resp.data.weather[0].description,
+      min: resp.data.main.temp_min,
+      max: resp.data.main.temp_max,
+      temp: resp.data.main.temp,
+    };
+  } catch (err) {
+    console.log(err);
+  }
+};
 module.exports = Searchs;

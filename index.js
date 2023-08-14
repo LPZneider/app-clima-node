@@ -1,4 +1,5 @@
 require("dotenv").config();
+const colors = require("colors");
 
 const {
   readInput,
@@ -19,14 +20,16 @@ const main = async () => {
         const sites = await searchs.city(dominian);
         const id = await listplaces(sites);
         const { name, lat, lng } = sites.find((l) => l.id === id);
+        const { desc, min, max, temp } = await searchs.localWeather(lat, lng);
 
-        console.log("\nInformación de la ciudad\n");
-        console.log("Ciudad: " + name);
-        console.log("Lat: " + lat);
-        console.log("Lng: " + lng);
-        console.log("Temperatura:");
-        console.log("Mínima:");
-        console.log("Maxima:");
+        console.log("\nInformación de la ciudad\n".cyan);
+        console.log("Ciudad: " + name.green);
+        console.log(`Lat: ${colors.green(lat)}`);
+        console.log(`Lng: ${colors.green(lng)}`);
+        console.log(`Temperatura: ${colors.green(temp)}`);
+        console.log(`Mínima: ${colors.green(min)}`);
+        console.log(`Maxima: ${colors.green(max)}`);
+        console.log("El clima esta: " + desc.green);
         break;
     }
     if (opt !== 0) await pausa();
