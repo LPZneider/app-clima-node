@@ -17,10 +17,13 @@ https://www.mapbox.com/
 
 https://docs.mapbox.com/api/search/geocoding/
 */
+const fs = require("fs");
 const axios = require("axios");
 
 function Searchs() {
-  this.history = ["bogota", "quetame", "madrid"];
+  this.dbPath = "./db/dataBase.json";
+  this.history = [];
+  this.readDB();
 }
 
 Searchs.prototype.paramsOpenWeather = function (lat, lon) {
@@ -78,4 +81,27 @@ Searchs.prototype.localWeather = async function (lat, lon) {
     console.log(err);
   }
 };
+
+Searchs.prototype.saveDB = function () {
+  const payload = {
+    history: this.history,
+  };
+  fs.writeFileSync(this.dbPath, JSON.stringify(payload));
+};
+Searchs.prototype.saveHistory = function (site) {
+  if (!this.history.includes(site)) {
+    this.history = this.history.slice(0, 5);
+    this.history.unshift(site);
+    this.saveDB();
+  }
+};
+
+Searchs.prototype.readDB = function (site) {
+  if (fs.existsSync(this.dbPath)) {
+    const data = fs.readFileSync(this.dbPath, { encoding: "utf-8" });
+    const { history } = JSON.parse(data);
+    this.history = [...history];
+  }
+};
+
 module.exports = Searchs;
